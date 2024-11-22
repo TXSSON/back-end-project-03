@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebContextManager">
+    <option name="state">
+      <map>
+        <entry key="file://$PROJECT_DIR$/Exercise-4/src/main/webapp/WEB-INF/views/admin/Building/edit.jsp" value="file://$PROJECT_DIR$/Exercise-4/src/main/webapp/WEB-INF/views/admin/Building" />
+        <entry key="file://$PROJECT_DIR$/Exercise-4/src/main/webapp/WEB-INF/views/admin/Building/list.jsp" value="file://$PROJECT_DIR$/Exercise-4/src/main/webapp/WEB-INF/views/admin/Building" />
+      </map>
+    </option>
+  </component>
+</project>
