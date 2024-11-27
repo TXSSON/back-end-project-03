@@ -4,19 +4,27 @@ package com.javaweb.api.admin;
 import com.javaweb.model.request.BuildingEditRequestDTO;
 import com.javaweb.model.response.ResponseDTO;
 import com.javaweb.model.response.StaffResponseDTO;
+import com.javaweb.service.BuildingService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
+
+
 @RestController(value = "")
 @RequestMapping("/api/building/")
 public class BuildingAPI {
+
+    @Autowired
+    private BuildingService buildingService;
+
+
     @PostMapping()
-    public BuildingEditRequestDTO addAndUpdateBuilding(@RequestBody BuildingEditRequestDTO dto) {
-        System.out.println("Success addAndUpdateBuilding");
-        dto.setId(111L);
-        return dto;
+    public void addAndUpdateBuilding(@RequestBody BuildingEditRequestDTO dto) {
+        buildingService.addBuilding(dto);
+
     }
     @DeleteMapping("{ids}")
     public void deleteBuilding(@PathVariable List<Long> ids) {

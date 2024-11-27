@@ -1,36 +1,38 @@
 package com.javaweb.utils;
 
-public class MapUtils {
-//	public static <T> T getObject(Map<String,Object> maps, String key, Class<T> tClass) {
-//		Object obj = maps.getOrDefault(key, null);
-//		if(obj != null) {
-//			if(tClass.getTypeName().equals("java.lang.Long")) {
-//				obj = obj != "" ? Long.valueOf(obj.toString()) : null;
-//			}
-//			else if(tClass.getTypeName().equals("java.lang.Integer")) {
-//				obj = obj != "" ? Integer.valueOf(obj.toString()) : null;
-//			}
-//			else if(tClass.getTypeName().equals("java.lang.String")) {
-//				obj = obj.toString();
-//			}
-//			return tClass.cast(obj);
-//		}
-//		return null;
-//	}
+import java.util.Map;
 
-	public static <T> T getObject(Object item, Class<T> tClass) {
-		if(item != null) {
-			if(tClass.getTypeName().equals("java.lang.Long")) {
-				item = item != "" ? Long.valueOf(item.toString()) : null;
-			}
-			else if(tClass.getTypeName().equals("java.lang.Integer")) {
-				item = item != "" ? Integer.valueOf(item.toString()) : null;
-			}
-			else if(tClass.getTypeName().equals("java.lang.String")) {
-				item = item.toString();
-			}
-			return tClass.cast(item);
-		}
-		return null;
-	}
+public class MapUtils {
+    public static <T> T getObject(Map<String, Object> params, String key, Class<T> tclass) {
+        Object obj = params.get(key);
+        if (obj != null) {
+            String objStr = obj.toString();
+            if (!objStr.isEmpty()) {
+                try {
+                    if (tclass == Integer.class) {
+                        obj = Integer.valueOf(objStr);
+                    } else if (tclass == Long.class) {
+                        obj = Long.valueOf(objStr);
+                    } else if (tclass == Double.class) {
+                        obj = Double.valueOf(objStr);
+                    } else if (tclass == Float.class) {
+                        obj = Float.valueOf(objStr);
+                    } else if (tclass == Boolean.class) {
+                        obj = Boolean.valueOf(objStr);
+                    } else if (tclass == String.class) {
+                        obj = objStr;
+                    } else {
+                        // Xử lý cho các kiểu dữ liệu khác hoặc ném ngoại lệ
+                        throw new IllegalArgumentException("Unsupported type: " + tclass);
+                    }
+                } catch (NumberFormatException e) {
+                    // Xử lý ngoại lệ chuyển đổi số
+                    obj = null;
+                }
+            } else {
+                obj = null;
+            }
+        }
+        return tclass.cast(obj);
+    }
 }

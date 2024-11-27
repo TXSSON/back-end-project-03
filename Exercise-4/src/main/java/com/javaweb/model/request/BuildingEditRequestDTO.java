@@ -1,21 +1,158 @@
 package com.javaweb.model.request;
 
+import com.javaweb.entity.RentAreaEntity;
+
 import java.util.List;
 
 public class BuildingEditRequestDTO {
     private Long id;
-    private String name;
+    private String productName;
     private Long floorArea;
     private String district;
     private String ward;
     private String street;
     private String Structure;
+    private Long numberOfBasement;
     private String direction;
     private Long level;
     private Long rentPrice;
-    private String rentArea;
+    private List<Integer> rentArea;
     private String rentPriceDescription;
-    private List<String> typeCode;
+    private String  type;
+    private String serviceFee;
+    private String carFee;
+    private String motorBikeFee;
+    private String overTimeFee;
+    private String electricityFee;
+    private String waterFee;
+    private String deposit;
+    private String payment;
+    private String rentTime;
+    private String decorationTime;
+    private String nameManager;
+    private String phoneManager;
+    private String brokerageFee;
+    private String note;
+
+    public Long getNumberOfBasement() {
+        return numberOfBasement;
+    }
+
+    public void setNumberOfBasement(Long numberOfBasement) {
+        this.numberOfBasement = numberOfBasement;
+    }
+
+    public String getServiceFee() {
+        return serviceFee;
+    }
+
+    public void setServiceFee(String serviceFee) {
+        this.serviceFee = serviceFee;
+    }
+
+    public String getCarFee() {
+        return carFee;
+    }
+
+    public void setCarFee(String carFee) {
+        this.carFee = carFee;
+    }
+
+    public String getMotorBikeFee() {
+        return motorBikeFee;
+    }
+
+    public void setMotorBikeFee(String motorBikeFee) {
+        this.motorBikeFee = motorBikeFee;
+    }
+
+    public String getOverTimeFee() {
+        return overTimeFee;
+    }
+
+    public void setOverTimeFee(String overTimeFee) {
+        this.overTimeFee = overTimeFee;
+    }
+
+    public String getElectricityFee() {
+        return electricityFee;
+    }
+
+    public void setElectricityFee(String electricityFee) {
+        this.electricityFee = electricityFee;
+    }
+
+    public String getWaterFee() {
+        return waterFee;
+    }
+
+    public void setWaterFee(String waterFee) {
+        this.waterFee = waterFee;
+    }
+
+    public String getDeposit() {
+        return deposit;
+    }
+
+    public void setDeposit(String deposit) {
+        this.deposit = deposit;
+    }
+
+    public String getPayment() {
+        return payment;
+    }
+
+    public void setPayment(String payment) {
+        this.payment = payment;
+    }
+
+    public String getRentTime() {
+        return rentTime;
+    }
+
+    public void setRentTime(String rentTime) {
+        this.rentTime = rentTime;
+    }
+
+    public String getDecorationTime() {
+        return decorationTime;
+    }
+
+    public void setDecorationTime(String decorationTime) {
+        this.decorationTime = decorationTime;
+    }
+
+    public String getNameManager() {
+        return nameManager;
+    }
+
+    public void setNameManager(String nameManager) {
+        this.nameManager = nameManager;
+    }
+
+    public String getPhoneManager() {
+        return phoneManager;
+    }
+
+    public void setPhoneManager(String phoneManager) {
+        this.phoneManager = phoneManager;
+    }
+
+    public String getBrokerageFee() {
+        return brokerageFee;
+    }
+
+    public void setBrokerageFee(String brokerageFee) {
+        this.brokerageFee = brokerageFee;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
+    }
 
     public Long getId() {
         return id;
@@ -29,8 +166,8 @@ public class BuildingEditRequestDTO {
         return level;
     }
 
-    public String getName() {
-        return name;
+    public String getProductName() {
+        return productName;
     }
 
     public Long getFloorArea() {
@@ -61,20 +198,18 @@ public class BuildingEditRequestDTO {
         return rentPrice;
     }
 
-    public String getRentArea() {
-        return rentArea;
-    }
+
 
     public String getRentPriceDescription() {
         return rentPriceDescription;
     }
 
-    public List<String> getTypeCode() {
-        return typeCode;
+    public String getType() {
+        return type;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setName(String productName) {
+        this.productName = productName;
     }
 
     public void setFloorArea(Long floorArea) {
@@ -109,7 +244,15 @@ public class BuildingEditRequestDTO {
         this.rentPrice = rentPrice;
     }
 
-    public void setRentArea(String rentArea) {
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
+
+    public List<Integer> getRentArea() {
+        return rentArea;
+    }
+
+    public void setRentArea(List<Integer> rentArea) {
         this.rentArea = rentArea;
     }
 
@@ -117,7 +260,7 @@ public class BuildingEditRequestDTO {
         this.rentPriceDescription = rentPriceDescription;
     }
 
-    public void setTypeCode(List<String> typeCode) {
-        this.typeCode = typeCode;
+    public void setType(String type) {
+        this.type = type;
     }
 }

@@ -120,11 +120,12 @@
             <div class="row">
                 <div class="col-md-8">
                     <label for="buildingName">Tên tòa nhà</label>
-                    <input type="text" id="buildingName" name="name" value="${buildingSearchRequest.name}"/>
+                    <input type="text" id="buildingName" name="product_name"
+                           value="${buildingSearchRequest.product_name}"/>
                 </div>
                 <div class="col-md-4">
                     <label for="floorArea">Diện tích sàn</label>
-                    <input type="text" id="floorArea" name="floorArea" value="${buildingSearchRequest.floorArea}"/>
+                    <input type="text" id="floorArea" name="floor_area" value="${buildingSearchRequest.floor_area}"/>
                 </div>
             </div>
             <div class="row">
@@ -147,8 +148,8 @@
             <div class="row">
                 <div class="col-md-3">
                     <label for="numberOfBasement">Số tầng hầm</label>
-                    <input type="number" id="numberOfBasement" name="numberOfBasement"
-                           value="${buildingSearchRequest.numberOfBasement}"/>
+                    <input type="number" id="numberOfBasement" name="number_of_basement"
+                           value="${buildingSearchRequest.number_of_basement}"/>
                 </div>
                 <div class="col-md-5">
                     <label for="direction">Hướng</label>
@@ -162,45 +163,45 @@
             <div class="row">
                 <div class="col-md-3">
                     <label for="areaFrom">Diện tích từ</label>
-                    <input type="number" id="areaFrom" name="areaFrom" value="${buildingSearchRequest.areaFrom}"/>
+                    <input type="number" id="areaFrom" name="area_from" value="${buildingSearchRequest.area_from}"/>
                 </div>
                 <div class="col-md-3">
                     <label for="areaTo">Diện tích đến</label>
-                    <input type="text" id="areaTo" name="areaTo" value="${buildingSearchRequest.areaTo}"/>
+                    <input type="text" id="areaTo" name="area_to" value="${buildingSearchRequest.area_to}"/>
                 </div>
                 <div class="col-md-3">
                     <label for="rentPriceFrom">Giá thuê từ</label>
-                    <input type="text" id="rentPriceFrom" name="rentPriceFrom"
-                           value="${buildingSearchRequest.rentPriceFrom}"/>
+                    <input type="text" id="rentPriceFrom" name="rent_price_from"
+                           value="${buildingSearchRequest.rent_price_from}"/>
                 </div>
                 <div class="col-md-3">
                     <label for="rentPriceTo">Giá thuê đến</label>
-                    <input type="text" id="rentPriceTo" name="rentPriceTo"
-                           value="${buildingSearchRequest.rentPriceTo}"/>
+                    <input type="text" id="rentPriceTo" name="rent_price_to"
+                           value="${buildingSearchRequest.rent_price_to}"/>
                 </div>
             </div>
 
             <div class="row">
                 <div class="col-md-3">
                     <label for="staff">Nhân Viên</label>
-                    <form:select id="staff" name="staffId" path="staffId">
+                    <form:select id="staff" name="staff_id" path="staff_id">
                         <form:option value="">---Chọn nhân viên---</form:option>
                         <form:options items="${listStaffs}"/>
                     </form:select>
                 </div>
                 <div class="col-md-5">
                     <label for="managerName">Tên quản lý</label>
-                    <input type="text" id="managerName" name="managerName"
-                           value="${buildingSearchRequest.managerName}"/>
+                    <input type="text" id="managerName" name="manager_name"
+                           value="${buildingSearchRequest.manager_name}"/>
                 </div>
                 <div class="col-md-4">
                     <label for="managerPhone">Số điện thoại quản lý</label>
-                    <input type="text" id="managerPhone" name="managerPhone"
-                           value="${buildingSearchRequest.managerPhone}"/>
+                    <input type="text" id="managerPhone" name="manager_phone"
+                           value="${buildingSearchRequest.manager_phone}"/>
                 </div>
             </div>
             <div class="row">
-                <form:checkboxes items="${typeCode}" path="typeCode"/>
+                <form:checkboxes items="${typeCode}" path="type"/>
             </div>
             <form:button type="submit">Tìm kiếm</form:button>
         </div>
@@ -232,27 +233,29 @@
         </tr>
         </thead>
         <tbody id="resultSearchBuilding">
-        <c:forEach var="item" items="${buildingSearchResponses}">
-            <tr>
-                <td><input type="checkbox" value="${item.id} " class="selectChildren"></td>
-                <td class="nameBuilding">${item.name}</td>
-                <td>${item.address}</td>
-                <td>${item.numberOfBasement}</td>
-                <td>${item.managerName}</td>
-                <td>${item.managerPhone}</td>
-                <td>${item.rentPrice}</td>
-                <td>${item.floorArea}</td>
-                <td>${item.emptyArea}</td>
-                <td>${item.rentArea}</td>
-                <td>${item.serviceFee}</td>
-                <td>${item.brokerageFee}</td>
-                <td>
-                    <button class="assignmentBuilding">&#128196;</button>
-                    <button class="editBuilding">&#9998;</button>
-                    <button class="deleteBuilding">&#128465;</button>
-                </td>
-            </tr>
-        </c:forEach>
+        <c:if test="${not empty buildingSearchResponses}">
+            <c:forEach var="item" items="${buildingSearchResponses}">
+                <tr>
+                    <td><input type="checkbox" value="${item.id} " class="selectChildren"></td>
+                    <td class="nameBuilding">${item.productName}</td>
+                    <td>${item.address}</td>
+                    <td>${item.numberOfBasements}</td>
+                    <td>${item.nameManager}</td>
+                    <td>${item.phoneNumber}</td>
+                    <td>${item.rentPrice}</td>
+                    <td>${item.floorArea}</td>
+                    <td>${item.emptyArea}</td>
+                    <td>${item.rentArea}</td>
+                    <td>${item.serviceFee}</td>
+                    <td>${item.brokerageFee}</td>
+                    <td>
+                        <button class="assignmentBuilding">&#128196;</button>
+                        <button class="editBuilding">&#9998;</button>
+                        <button class="deleteBuilding">&#128465;</button>
+                    </td>
+                </tr>
+            </c:forEach>
+        </c:if>
         </tbody>
     </table>
 </div>

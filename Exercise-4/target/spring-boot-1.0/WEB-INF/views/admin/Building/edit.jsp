@@ -114,11 +114,11 @@
 
 <div class="search">
     <div class="container-fluid">
-        <form:form modelAttribute="buildingEditRequest" id="form-edit">
+        <form:form modelAttribute="buildingEditRequestDTO" id="form-edit">
         <div class="row">
             <div class="col-md-12">
                 <label for="buildingName">Tên tòa nhà</label>
-                <form:input type="text" id="buildingName" name="buildingName" path="name"/>
+                <form:input type="text" id="buildingName" name="buildingName" path="productName"/>
             </div>
         </div>
         <div class="row">
@@ -146,6 +146,12 @@
             <div class="col-md-12">
                 <label for="structure">Kết cấu</label>
                 <form:input type="text" id="structure" name="structure" path="structure"/>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <label for="numberOfBasement">Số tầng hầm</label>
+                <form:input type="text" id="numberOfBasement" name="numberOfBasement" path="numberOfBasement"/>
             </div>
         </div>
         <div class="row">
@@ -178,6 +184,7 @@
                 <form:input type="text" id="rentPrice" name="rentPrice" path="rentPrice"/>
             </div>
         </div>
+
         <div class="row">
             <div class="col-md-12">
                 <label for="rentPriceDescription">Mô tả giá</label>
@@ -185,12 +192,106 @@
                             path="rentPriceDescription"/>
             </div>
         </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <label for="serviceFee">Phí dịch vụ</label>
+                <form:input type="text" id="serviceFee" name="serviceFee"
+                            path="serviceFee"/>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <label for="carFee">phí ô tô </label>
+                <form:input type="text" id="carFee" name="carFee"
+                            path="carFee"/>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <label for="motorBikeFee">phí mô tô </label>
+                <form:input type="text" id="motorBikeFee" name="motorBikeFee"
+                            path="motorBikeFee"/>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <label for="overTimeFee">phí ngoài giờ</label>
+                <form:input type="text" id="overTimeFee" name="overTimeFee"
+                            path="overTimeFee"/>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <label for="electricityFee">Tiền điện</label>
+                <form:input type="text" id="electricityFee" name="electricityFee"
+                            path="electricityFee"/>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <label for="deposit">Đặt cọc</label>
+                <form:input type="text" id="deposit" name="deposit"
+                            path="deposit"/>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <label for="payment">Thanh toán </label>
+                <form:input type="text" id="payment" name="payment"
+                            path="payment"/>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <label for="rentTime"> Thời hạn thuê </label>
+                <form:input type="text" id="rentTime" name="rentTime"
+                            path="rentTime"/>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <label for="decorationTime"> Thời gian trang trí </label>
+                <form:input type="text" id="decorationTime" name="decorationTime"
+                            path="decorationTime"/>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <label for="nameManager"> Tên quản lý </label>
+                <form:input type="text" id="nameManager" name="nameManager"
+                            path="nameManager"/>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <label for="phoneManager"> Số điện thoại quản lý </label>
+                <form:input type="text" id="phoneManager" name="phoneManager"
+                            path="phoneManager"/>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <label for="brokerageFee"> Phí môi giới </label>
+                <form:input type="text" id="brokerageFee" name="brokerageFee"
+                            path="brokerageFee"/>
+            </div>
+        </div>
+
         <div class="row">
             <div class="col-md-12">
                 <label class="form-label">Loại toà nhà</label>
-                <form:checkboxes items="${typeCode}" path="typeCode"/>
+                <form:checkboxes items="${typeCode}" path="type"/>
             </div>
         </div>
+        <div class="row">
+            <div class="col-md-12">
+                <label for="note"> Ghi chú </label>
+                <form:input type="text" id="note" name="note"
+                            path="note"/>
+            </div>
+        </div>
+
         <form:hidden path="id" id="buildingId"/>
     </div>
     </form:form>
@@ -227,13 +328,14 @@
             evt.preventDefault(); // Ngăn trang reload
             const data = transformData();
             if (isValidData(data)) {
+                console.log(data)
                 fetchAPI("/api/building/", data);
             }
         });
     }
 
     const cancelEditBuilding = document.querySelector("#cancelEditBuilding");
-    if (cancelEditBuilding){
+    if (cancelEditBuilding) {
         cancelEditBuilding.addEventListener('click', function (evt) {
             evt.preventDefault();
             window.location.href = "/admin/building-list"
@@ -243,24 +345,27 @@
 
     function transformData() {
         let data = {};
-        let typeCode = [];
+        let type = [];
+        let rentArea = [];
         const dataFrom = new FormData(document.getElementById("form-edit"));
 
         dataFrom.forEach(function (value, key) {
-            if (key === 'typeCode') {
-                typeCode.push(value);
+            if (key === 'type') {
+                type.push(value);
+            } else if (key === 'rentArea') {
+
+                rentArea = value.split(", ").map(Number);  // Chuyển chuỗi thành mảng số
             } else {
                 data[key] = value;
             }
         });
-
-        data['typeCode'] = typeCode;
-
+        data['rentArea'] = rentArea;
+        data['type'] = type.toString();
         return data;
     }
 
     function isValidData(data) {
-        const requiredFields = ['name', 'street', 'ward', 'district', 'rentPrice'];
+        const requiredFields = ['productName', 'street', 'ward', 'district', 'rentPrice'];
 
         for (const field of requiredFields) {
             if (!data[field] || data[field].trim() === "") {
@@ -280,7 +385,12 @@
             body: JSON.stringify(data),
         }).then((response) => {
             if (!response.ok) {
-                throw new Error("Network response was not ok");
+                throw new Error(`HTTP status ${response.status}`);
+            }
+            // Kiểm tra Content-Type hoặc Response Body
+            const contentType = response.headers.get("Content-Type");
+            if (response.status === 204 || !contentType || contentType.indexOf("application/json") === -1) {
+                return null; // Không parse JSON nếu không có nội dung
             }
             return response.json();
         }).then((result) => {
