@@ -117,8 +117,8 @@
         <form:form modelAttribute="buildingEditRequestDTO" id="form-edit">
         <div class="row">
             <div class="col-md-12">
-                <label for="buildingName">Tên tòa nhà</label>
-                <form:input type="text" id="buildingName" name="buildingName" path="productName"/>
+                <label for="productName">Tên tòa nhà</label>
+                <form:input type="text" id="productName" name="productName" path="productName"/>
             </div>
         </div>
         <div class="row">
@@ -292,18 +292,18 @@
             </div>
         </div>
 
-        <form:hidden path="id" id="buildingId"/>
+        <form:hidden path="id" id="buildingId" name ="id"/>
     </div>
     </form:form>
 </div>
 
 <div>
-    <c:if test="${ empty buildingEditRequest.id}">
+    <c:if test="${ empty buildingEditRequestDTO.id}">
         <button id="addBuilding" type="button">
             Thêm tòa nhà
         </button>
     </c:if>
-    <c:if test="${ not empty buildingEditRequest.id }">
+    <c:if test="${ not empty buildingEditRequestDTO.id }">
         <button id="updateBuilding" type="button">
             Cập nhật tòa nhà
         </button>
@@ -317,6 +317,7 @@
     if (updateButton) {
         updateButton.addEventListener('click', function (evt) {
             evt.preventDefault(); // Ngăn trang reload
+            alert("Đã bắt sự kiện cập nhật tòa nha ")
             const data = transformData();
             fetchAPI("/api/building/", data);
         });
@@ -327,10 +328,10 @@
         addButton.addEventListener('click', function (evt) {
             evt.preventDefault(); // Ngăn trang reload
             const data = transformData();
-            if (isValidData(data)) {
-                console.log(data)
-                fetchAPI("/api/building/", data);
-            }
+           if(isValidData(data)){
+               fetchAPI("/api/building/", data);
+           }
+
         });
     }
 

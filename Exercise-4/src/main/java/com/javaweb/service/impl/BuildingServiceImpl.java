@@ -1,6 +1,7 @@
 package com.javaweb.service.impl;
 
 import com.javaweb.converter.BuildingEditRequestConverter;
+import com.javaweb.converter.BuildingEntityConverter;
 import com.javaweb.converter.BuildingRequestConverter;
 import com.javaweb.converter.BuildingResponseConverter;
 import com.javaweb.entity.BuildingEntity;
@@ -8,6 +9,7 @@ import com.javaweb.entity.RentAreaEntity;
 import com.javaweb.model.request.BuildingEditRequestDTO;
 import com.javaweb.model.request.BuildingSearchRequest;
 import com.javaweb.model.response.BuildingSearchResponse;
+import com.javaweb.repository.AssignmentBuildingRepository;
 import com.javaweb.repository.BuildingRepository;
 import com.javaweb.repository.RentAreaRepository;
 import com.javaweb.service.BuildingService;
@@ -34,6 +36,10 @@ public class BuildingServiceImpl implements BuildingService {
     private BuildingEditRequestConverter buildingEditRequestConverter;
     @Autowired
     private RentAreaRepository rentAreaRepository;
+    @Autowired
+    private BuildingEntityConverter buildingEntityConverter;
+    @Autowired
+    private AssignmentBuildingRepository assignmentBuildingRepository;
 
     @Override
     public List<BuildingSearchResponse> FindAllBuildings(Map<String, Object> params, List<String> type) {
@@ -55,18 +61,33 @@ public class BuildingServiceImpl implements BuildingService {
     public void addBuilding(BuildingEditRequestDTO buildingEditRequestDTO) {
         // Chuyển đổi từ DTO sang BuildingEntity
         BuildingEntity buildingEntity = buildingEditRequestConverter.toBuildingEntity(buildingEditRequestDTO);
-
         // Lưu BuildingEntity trước để nhận ID tự động
+        if (buildingEntity.getId() != null){
+            rentAreaRepository.deleteByBuildingId(buildingEntity.getId());
+        }
         buildingRepository.save(buildingEntity);
-
         // Sau khi lưu BuildingEntity, lấy ID của nó để gán cho RentAreaEntity
         List<RentAreaEntity> rentAreaEntities = buildingEditRequestConverter.toRentAreaEntity(buildingEditRequestDTO);
-
         // Gán ID của BuildingEntity cho mỗi RentAreaEntity
         for (RentAreaEntity rentAreaEntity : rentAreaEntities) {
             rentAreaEntity.setBuildingEntity(buildingEntity); // Gán BuildingEntity cho RentAreaEntity
         }
-        // Lưu tất cả RentAreaEntity đã gán BuildingEntity
         rentAreaRepository.saveAll(rentAreaEntities);
+    }
+
+    @Override
+    public void deleteBuilding(List<Long> ids) {
+        for (Long id : ids) {
+            assignmentBuildingRepository.deleteByBuildingId(id);
+            rentAreaRepository.deleteByBuildingId(id);
+            buildingRepository.deleteById(id);
+        }
+    }
+
+    @Override
+    public BuildingEditRequestDTO FindBuildingById(Long id) {
+        BuildingEntity buildingEntity = buildingRepository.findById(id).get();
+        BuildingEditRequestDTO buildingEditRequestDTO = buildingEntityConverter.toBuildingEditRequestDTO(buildingEntity);
+        return buildingEditRequestDTO;
     }
 }

@@ -236,7 +236,7 @@
         <c:if test="${not empty buildingSearchResponses}">
             <c:forEach var="item" items="${buildingSearchResponses}">
                 <tr>
-                    <td><input type="checkbox" value="${item.id} " class="selectChildren"></td>
+                    <td><input type="checkbox" value="${item.id}" class="selectChildren"></td>
                     <td class="nameBuilding">${item.productName}</td>
                     <td>${item.address}</td>
                     <td>${item.numberOfBasements}</td>
@@ -273,10 +273,9 @@
             </tr>
             </thead>
             <tbody id="addstaff">
-
             </tbody>
         </table>
-        <button>
+        <button id="updateAssignmentBuilding" >
             Giao tòa nhà
         </button>
     </div>
@@ -329,32 +328,36 @@
             const row = evt.target.closest("tr");
             const buildingId = row.querySelector(".selectChildren").value;
             window.location.href = "/admin/building-edit/" + buildingId;
-        } else if (evt.target.classList.contains("deleteBuilding")) {
-            const row = evt.target.closest("tr");
-            const isDeleteBuilding = confirm("Bạn có chắc chắn muốn xóa tòa nhà: " + row.querySelector(".nameBuilding").textContent);
-            if (isDeleteBuilding) {
-                alert("Bạn đã xác nhận xóa tòa nhà");
-            } else {
-                return;
-            }
-            let buildingId = row.querySelector(".selectChildren").value;
-            let urlTarget = "/api/Building/" + buildingId;
-            fetch(urlTarget, {
-                method: "Delete"
-            }).then(response => {
-                if (response.ok) {
-                    window.alert("Xóa tòa nhà thành công");
+        }
+        else if (evt.target.classList.contains("deleteBuilding")) {
+                const row = evt.target.closest("tr");
+                const isDeleteBuilding = confirm("Bạn có chắc chắn muốn xóa tòa nhà: " + row.querySelector(".nameBuilding").textContent);
+                if (isDeleteBuilding) {
+                    alert("Bạn đã xác nhận xóa tòa nhà");
                 } else {
-                    window.alert("Xóa tòa nhà thành công");
+                    return;
                 }
-            }).catch(error => {
-                console.log("Lỗi xóa tòa nhà" + error)
-                alert("Không thể xóa tòa nhà");
-            })
-
+                let buildingId = row.querySelector(".selectChildren").value;
+                let urlTarget = "/api/building/" + buildingId;
+                console. log(urlTarget);
+                fetch(urlTarget, {
+                    method: "Delete"
+                }).then(response => {
+                    if (response.ok) {
+                        window.alert("Xóa tòa nhà thành công");
+                        location.reload();
+                    } else {
+                        window.alert("Xóa tòa nhà không thành thành công");
+                    }
+                }).catch(error => {
+                    console.log("Lỗi xóa tòa nhà" + error)
+                    alert("Không thể xóa tòa nhà");
+                })
         } else if (evt.target.classList.contains("assignmentBuilding")) {
             const row = evt.target.closest("tr");
             const buildingId = row.querySelector(".selectChildren").value;
+            document.getElementById('updateAssignmentBuilding').setAttribute('value', buildingId);
+
             let urlTarget = "/api/building/" + buildingId;
             fetch(urlTarget)
                 .then(response => {
@@ -368,18 +371,19 @@
                 .then(result => {
                     if (result) {
                         let htmls = "";
-                        console.log(result);
                         result.forEach(item => {
                             htmls += '<tr>';
 
+
+
                             // Cột checkbox
                             if (item.data.checked) {
-                                htmls += '<td><input type="checkbox" checked /></td>';
+                                htmls += '<td><input type="checkbox" checked class="modal-content-checkbox" value = "' + item.data.staffId +  '" /></td>';
                             } else {
-                                htmls += '<td><input type="checkbox" /></td>';
+                                htmls += '<td><input type="checkbox"  class="modal-content-checkbox" value = "' +  item.data.staffId  +  '" /></td>';
                             }
                             // Cột fullName
-                            htmls += '<td>' + item.data.fullName + '<td>';
+                            htmls += '<td>' + item.data.fullName + '</td>';
 
                             htmls += '</tr>';
                         });
@@ -409,6 +413,59 @@
             }
         }
     })
+
+    document.querySelector("#updateAssignmentBuilding").addEventListener('click', function (evt) {
+        evt.preventDefault();
+        // Lấy tất cả checkbox được chọn
+        let checkboxes = document.querySelectorAll('.modal-content-checkbox:checked');
+        // Lấy buildingId từ value của button, chuyển nó thành số nếu cần
+        let buildingId = parseInt(document.querySelector("#updateAssignmentBuilding").value, 10);
+        if (isNaN(buildingId)) {
+            console.warn("Giá trị checkbox không hợp lệ:", buildingId.value);
+            return; // Bỏ qua checkbox không hợp lệ
+        }
+        // Tạo một đối tượng để lưu trữ cặp khóa - giá trị (ở đây là các id của checkbox và buildingId)
+        let mp = {};
+        // Lặp qua các checkbox được chọn và thêm vào đối tượng mp
+        checkboxes.forEach(function (checkbox) {
+            // Sử dụng giá trị của checkbox (thường là id hoặc name), chuyển giá trị thành số nếu cần
+            let checkboxValue = parseInt(checkbox.value, 10); // Chuyển checkbox value thành số (Long)
+
+            if (isNaN(checkboxValue)) {
+                console.warn("Giá trị checkbox không hợp lệ:", checkbox.value);
+                return; // Bỏ qua checkbox không hợp lệ
+            }
+
+            mp[checkboxValue] = buildingId; // Thêm vào đối tượng mp
+        });
+
+
+
+        // Gửi yêu cầu POST với dữ liệu đã chuyển thành JSON
+        fetch("/api/assignment/", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'  // Đảm bảo gửi dữ liệu dưới dạng JSON
+            },
+            body: JSON.stringify(mp)  // Chuyển đối tượng mp thành chuỗi JSON
+        })
+            .then(response => {
+                if (response.ok) {
+                    // Nếu response trả về mã 2xx (thành công)
+                    alert("Cập nhật assignment thành công");
+                    location.reload();
+                } else {
+                    // Nếu response trả về mã lỗi (không phải 2xx)
+                    alert("Cập nhật assignment không thành công");
+                }
+            })
+            .catch(error => {
+                // Xử lý nếu có lỗi khi gửi yêu cầu
+                console.error('Lỗi khi gửi yêu cầu:', error);
+                alert("Đã có lỗi xảy ra");
+            });
+    });
+
 </script>
 </body>
 </html>

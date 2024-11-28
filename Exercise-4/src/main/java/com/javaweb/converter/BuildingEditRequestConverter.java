@@ -21,7 +21,6 @@ public class BuildingEditRequestConverter {
     public BuildingEntity toBuildingEntity(BuildingEditRequestDTO buildingEditRequestDTO) {
         // Chuyển đổi từ DTO sang Entity
         BuildingEntity buildingEntity = modelMapper.map(buildingEditRequestDTO, BuildingEntity.class);
-
         return buildingEntity;
     }
     // Chuyển đổi BuildingEditRequestDTO thành RentAreaEntity

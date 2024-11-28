@@ -1,53 +1,47 @@
 package com.javaweb.api.admin;
 
-
 import com.javaweb.model.request.BuildingEditRequestDTO;
 import com.javaweb.model.response.ResponseDTO;
 import com.javaweb.model.response.StaffResponseDTO;
+import com.javaweb.service.AssignBuildingService;
 import com.javaweb.service.BuildingService;
+import com.javaweb.service.impl.AssignBuildingServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
-
-
+import java.util.Map;
 
 @RestController(value = "")
-@RequestMapping("/api/building/")
+@RequestMapping("/api")
 public class BuildingAPI {
 
     @Autowired
     private BuildingService buildingService;
+    @Autowired
+    private AssignBuildingService assignBuildingService;
+    @Autowired
+    private AssignBuildingServiceImpl assignBuildingServiceImpl;
 
-
-    @PostMapping()
+    @PostMapping("/building/")
     public void addAndUpdateBuilding(@RequestBody BuildingEditRequestDTO dto) {
         buildingService.addBuilding(dto);
+    }
 
+    @PostMapping("/assignment/")
+    public void updateAssignmentBuilding(@RequestBody Map<Long, Long> mp) {
+        assignBuildingService.updateAssignmentBuilding(mp);
     }
-    @DeleteMapping("{ids}")
+
+    @DeleteMapping("/building/{ids}")
     public void deleteBuilding(@PathVariable List<Long> ids) {
-        System.out.println("Success deleteBuilding");
+       buildingService.deleteBuilding(ids);
     }
-    @GetMapping("{id}")
+    @GetMapping("/building/{id}")
     public List<ResponseDTO> findStaff(@PathVariable Long id){
-        StaffResponseDTO staffResponseDTO = new StaffResponseDTO();
-        staffResponseDTO.setStaffId(3L);
-        staffResponseDTO.setFullName("Nguyễn Văn Tài");
-        staffResponseDTO.setChecked(true);
-        StaffResponseDTO staffResponseDTO1 = new StaffResponseDTO();
-        staffResponseDTO1.setStaffId(4L);
-        staffResponseDTO1.setFullName("Trần Văn Nam");
-        staffResponseDTO1.setChecked(false);
-        List<ResponseDTO> responseDTO = new ArrayList<>();
-        ResponseDTO responseDTO1 = new ResponseDTO();
-        responseDTO1.setData(staffResponseDTO);
-        responseDTO.add(responseDTO1);
-        ResponseDTO responseDTO2 = new ResponseDTO();
-        responseDTO2.setData(staffResponseDTO1);
-        responseDTO.add(responseDTO2);
-        return responseDTO;
+        List<ResponseDTO> responseDTOs =assignBuildingServiceImpl.findAllStaff(id);
+        return responseDTOs;
     }
 }
 

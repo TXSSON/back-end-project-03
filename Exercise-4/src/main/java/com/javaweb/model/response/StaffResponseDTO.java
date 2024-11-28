@@ -22,7 +22,7 @@ public class StaffResponseDTO {
         this.staffId = staffId;
     }
 
-    public boolean getChecked() {
+    public boolean isChecked() {
         return checked;
     }
 

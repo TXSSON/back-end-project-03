@@ -1,5 +1,6 @@
 package com.javaweb.controller.admin;
 
+import com.javaweb.entity.BuildingEntity;
 import com.javaweb.enums.BuildingType;
 import com.javaweb.enums.DistrictCode;
 import com.javaweb.model.request.BuildingEditRequestDTO;
@@ -32,7 +33,6 @@ public class BuildingController {
     public ModelAndView buildingSearch() {
         ModelAndView mav = new ModelAndView();
         mav.setViewName("admin/Building/list");
-
         // Tạo một đối tượng BuildingSearchResponse
         List<BuildingSearchResponse> buildingSearchResponses = new ArrayList<>();
         BuildingSearchRequest buildingSearchRequest = new BuildingSearchRequest();
@@ -73,15 +73,12 @@ public class BuildingController {
     }
 
     @RequestMapping(value = "building-edit/{id}", method = RequestMethod.GET)
-    public ModelAndView buildingEdit(@PathVariable Long id, HttpServletRequest request) {
+    public ModelAndView buildingEdit(@PathVariable Long id) {
 
-
-
+        BuildingEditRequestDTO buildingEditRequestDTO = buildingService.FindBuildingById(id);
         ModelAndView mav = new ModelAndView();
         mav.setViewName("admin/Building/edit");
-        BuildingEditRequestDTO item1 = new BuildingEditRequestDTO();
-
-        mav.addObject("buildingEditRequest", item1);
+        mav.addObject("buildingEditRequestDTO", buildingEditRequestDTO);
         mav.addObject("districtCode", DistrictCode.type());
         mav.addObject("typeCode", BuildingType.type());
         return mav;
